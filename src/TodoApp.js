@@ -1,6 +1,6 @@
-import {view as Filter } from './filter/'
+import {view as Filter } from './filter'
 import React from 'react'
-import {view as Todos } from './todos/'
+import {view as Todos } from './todos'
 
 function TodoApp(){
     return(

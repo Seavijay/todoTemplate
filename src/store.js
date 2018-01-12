@@ -3,24 +3,24 @@ import {combineReducers, createStore} from 'redux'
 import{reducer as filterReducer} from './filter'
 import{reducer as todoReducer} from './todos'
 
-const initialValue = {
-    todos:[
+const initValues = {
+    'filter': 'all',
+    'todos': [
         {
-            text: 'First todo',
-            completed: false,
-            id: 0
+            'completed': false,
+            'id': 0,
+            'text': 'First todo'
         },
         {
-            text: 'Second todo',
-            completed: false,
-            id: 0
+            'completed': false,
+            'id': 0,
+            'text': 'Second todo'
         }
-    ],
-    filter:'all'
+    ]
 }
 const reducer = combineReducers({
-    todo:todoReducer,
-    filter:filterReducer
+    'filter': filterReducer,
+    'todo': todoReducer
 })
 
-export default createStore(reducer) 
+export default createStore(reducer, initValues) 
