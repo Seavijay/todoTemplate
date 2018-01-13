@@ -8,5 +8,5 @@ ReactDom.render(
     <Provider store={store}>
         <TodoApp />
     </Provider>,
-    document.querySelector('#root')
+    document.getElementById('root')
 )

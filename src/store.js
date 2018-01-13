@@ -1,26 +1,26 @@
-import {combineReducers, createStore} from 'redux'
+import {createStore, combineReducers, applyMiddleware, compose} from 'redux'
 
-import{reducer as filterReducer} from './filter'
-import{reducer as todoReducer} from './todos'
+import {reducer as todoReducer} from './todos'
+import {reducer as filterReducer} from './filter'
 
-const initValues = {
-    'filter': 'all',
-    'todos': [
-        {
-            'completed': false,
-            'id': 0,
-            'text': 'First todo'
-        },
-        {
-            'completed': false,
-            'id': 0,
-            'text': 'Second todo'
-        }
-    ]
-}
+import Perf from 'react-addons-perf'
+
+const win = window
+win.Perf = Perf
+
 const reducer = combineReducers({
-    'filter': filterReducer,
-    'todo': todoReducer
+  todos: todoReducer,
+  filter: filterReducer
 })
 
-export default createStore(reducer, initValues) 
+const middlewares = []
+if (process.env.NODE_ENV !== 'production') {
+  middlewares.push(require('redux-immutable-state-invariant')())
+}
+
+const storeEnhancers = compose(
+  applyMiddleware(...middlewares),
+  (win && win.devToolsExtension) ? win.devToolsExtension() : (f) => f,
+)
+
+export default createStore(reducer, {}, storeEnhancers)
