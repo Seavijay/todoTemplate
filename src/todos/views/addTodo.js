@@ -11,6 +11,7 @@ class AddTodo extends Component {
         }
         this.onSubmit = this.onSubmit.bind(this)
         this.refInput = this.refInput.bind(this)
+        this.onInputChange = this.onInputChange.bind(this)
     }
 
     onInputChange(event) {

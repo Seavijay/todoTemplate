@@ -1,6 +1,6 @@
 import {ADD_TODO, REMOVE_TODO, TOGGLE_TODO} from './actionTypes.js'
 
-let nextTodoId = 1
+let nextTodoId = 0
 export const addTodo = (text) => ({
     'type': ADD_TODO,
     'completed': false,

@@ -1,4 +1,4 @@
-import{ADD_TODO, REMOVEI_TODO, TOGGLE_TODO} from './actionTypes.js'
+import{ADD_TODO, REMOVE_TODO, TOGGLE_TODO} from './actionTypes.js'
 
 export default (state=[], action)=>{
     switch(action.type){
@@ -12,7 +12,7 @@ export default (state=[], action)=>{
                 ...state
             ]
         }
-        case REMOVEI_TODO: {
+        case REMOVE_TODO: {
             return state.filter((todoItem)=>{
                 return todoItem.id!==action.id
             })
