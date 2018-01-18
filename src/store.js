@@ -20,7 +20,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const storeEnhancers = compose(
   applyMiddleware(...middlewares),
-  (win && win.devToolsExtension) ? win.devToolsExtension() : (f) => f,
+  (win && win.devToolsExtension) ? win.devToolsExtension() : (f) => f
 )
 
 export default createStore(reducer, {}, storeEnhancers)

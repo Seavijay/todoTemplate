@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import TodoApp from './TodoApp';
 import store from './Store.js';
 
-ReactDOM.render(
+const root = document.querySelector('#root')
+const element = (
   <Provider store={store}>
     <TodoApp />
-  </Provider>,
-    document.querySelector('#root')
+  </Provider>
 )
+const render=()=>ReactDOM.render(element, root)
+
+render()

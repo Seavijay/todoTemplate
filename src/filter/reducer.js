@@ -1,4 +1,4 @@
-import {FilterTypes} from '..contants.js'
+import {FilterTypes} from '../constants.js'
 import {SET_FILTER} from './actionTypes.js'
 
 export default (state = FilterTypes.ALL, action) => {
