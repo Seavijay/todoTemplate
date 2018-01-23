@@ -1,32 +1,61 @@
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const path = require('path')
+const paths = require('./paths')
 const babelConfig = require('./babel.config.dev')
 const postcssConfig = require('./postcss.config.dev')
 
 module.exports = {
     entry: {
-        app: path.resolve(__dirname, '../src/index.js')
+        ...paths.entries,
+        app: [
+            'webpack-hot-middleware/client',
+            paths.entries.app
+        ]
     },
     output: {
-        path: path.resolve(__dirname, '../public'),
-        filename: 'static/js/[name].[hash].js',
-        publicPath: '/'
-    },
-    resolve: {
-        extensions: ['.js', '.jsx', '.json'],
+        path: paths.build,
+        publicPath: paths.servedPath,
+        pathinfo: true,
+        filename: 'static/js/[name].js',
     },
     stats: 'none',
-    devtool: 'inline-source-map',
-    devServer: {
-        contentBase: path.resolve(__dirname, '../public')
+    resolve: {
+        extensions: ['.js', '.jsx', '.json'],
     },
     module: {
         rules: [{
             test: /\.(js|jsx)$/,
+            use: [{ loader: 'eslint-loader' }],
+            include: paths.src,
+            exclude: /node_modules/,
+            enforce: 'pre'
+        }, {
+            test: /\.json$/,
+            use: [{ loader: 'json-loader' }]
+        }, {
+            test: /-worker\.js$/,
+            include: paths.src,
+            use: [{ loader: 'babel-loader' }, { loader: 'worker-loader' }],
+        }, {
+            test: /\.(js|jsx)$/,
             exclude: /-worker\.js$/,
-            include: path.resolve(__dirname, '../src'),
+            include: paths.src,
             use: [{ loader: 'babel-loader', options: { ...babelConfig, cacheDirectory: true, } }]
+        }, {
+            test: /\.less$/,
+            use: [
+                { loader: 'style-loader' },
+                { loader: 'css-loader' },
+                { loader: 'less-loader' }
+            ]
+        }, {
+            test: /\.module.css$/,
+            include: paths.src,
+            use: [
+                { loader: 'style-loader' },
+                { loader: 'css-loader', options: { importLoaders: 1, module: true } },
+                { loader: 'postcss-loader', options: postcssConfig }
+            ]
         }, {
             test: /\.css$/,
             use: [
@@ -44,7 +73,7 @@ module.exports = {
         new webpack.NamedModulesPlugin(),
         new HtmlWebpackPlugin({
             inject: true,
-            template: path.resolve(__dirname, '../public/index.html'),
+            template: paths.html,
             chunksSortMode: (chunk1, chunk2) => {
                 const list = ['polyfills', 'vendor', 'app']
                 var index1 = list.indexOf(chunk1.names[0])

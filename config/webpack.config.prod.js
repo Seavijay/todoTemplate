@@ -5,29 +5,58 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const postcssConfig = require('./postcss.config.prod')
 const babelConfig = require('./babel.config.prod')
-const path = require('path')
+const paths = require('./paths')
 
 module.exports = {
     entry: {
-        app: path.resolve(__dirname, '../src/index.js')
+        ...paths.entries,
     },
     output: {
-        path: path.resolve(__dirname, '../public'),
-        filename: '[name].bundle.js',
-        publicPath: '/'
+        path: paths.build,
+        publicPath: paths.servedPath,
+        pathinfo: true,
+        filename: 'static/js/[name].[hash].js',
     },
     resolve: {
-        extensions: ['.js', '.jsx', '.json']
-    },
-    devServer: {
-        contentBase: path.resolve(__dirname, '../public')
+        extensions: ['.js', '.jsx', '.json'],
     },
     module: {
         rules: [{
             test: /\.(js|jsx)$/,
-            exclude: /node_modules/,
-            include: path.resolve(__dirname, '../src'),
+            use: [{ loader: 'eslint-loader' }],
+            include: paths.src,
+            enforce: 'pre'
+        }, {
+            test: /\.json$/,
+            use: [{ loader: 'json-loader' }]
+        }, {
+            test: /-worker\.js$/,
+            include: paths.src,
+            use: [{ loader: 'babel-loader' }, { loader: 'worker-loader' }],
+        }, {
+            test: /\.(js|jsx)$/,
+            exclude: /-worker\.js$/,
+            include: paths.src,
             use: [{ loader: 'babel-loader', options: { ...babelConfig, cacheDirectory: true, } }]
+        }, {
+            test: /\.less$/,
+            use: ExtractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: [
+                    { loader: 'css-loader' },
+                    { loader: 'less-loader' }
+                ]
+            })
+        }, {
+            test: /\.module.css$/,
+            include: paths.src,
+            use: ExtractTextPlugin.extract({
+                fallback: 'style-loader',
+                use: [
+                    { loader: 'css-loader', options: { importLoaders: 1, module: true } },
+                    { loader: 'postcss-loader', options: postcssConfig }
+                ]
+            })
         }, {
             test: /\.css$/,
             use: ExtractTextPlugin.extract({
@@ -51,7 +80,7 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             inject: true,
-            template: path.resolve(__dirname, '../public/index'),
+            template: paths.html,
             minify: {
                 removeComments: true,
                 collapseWhitespace: true,

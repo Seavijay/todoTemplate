@@ -1,6 +1,7 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { addTodo } from '../actions.js'
+import PropTypes from 'prop-types'
 
 class AddTodo extends Component {
 
@@ -24,7 +25,7 @@ class AddTodo extends Component {
         e.preventDefault()
 
         const inputValue = this.state.value
-        if (!input.value.trim()) {
+        if (!inputValue.trim()) {
             return
         }
         this.props.onAdd(inputValue)
@@ -52,4 +53,4 @@ const mapDispatchToProps = (dispatch) => {
         onAdd: (text) => { dispatch(addTodo(text)) }
     }
 }
-export default connect(null.mapDispatchToProps)(AddTodo)
+export default connect(null, mapDispatchToProps)(AddTodo)

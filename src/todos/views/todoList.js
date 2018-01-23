@@ -1,54 +1,57 @@
-import React, {PropTypes} from 'react'
-import {connect} from 'react-redux'
+import React from 'react'
+import { connect } from 'react-redux'
 import TodoItem from './todoItem.js'
-import {toggleTodo, removeTodo} from '../actions.js'
-import {FilterTypes} from '../../constants.js'
+import { toggleTodo, removeTodo } from '../actions.js'
+import { FilterTypes } from '../../constants.js'
+import PropTypes from 'prop-types'
 
-const TodoList = ({onToggleTodo,onRemoveTodo,todos})=>{
-    return(
+const TodoList = ({ onToggleTodo, onRemoveTodo, todos }) => {
+    return (
         <ul className='todo-list'>
-        {
-            todos.map((item)=>{
-                <TodoItem
-                    key= {item.id}
-                    text= {item.text}
-                    completed= {item.completed}
-                    onToggle= {()=>onToggleTodo(item.id)}
-                    onRemove= {()=>onRemoveTodo(item.id)}
-                />
-            })
-        }
+            {
+                todos.map((item) => {
+                    return (
+                        <TodoItem
+                            key={item.id}
+                            text={item.text}
+                            completed={item.completed}
+                            onToggle={() => onToggleTodo(item.id)}
+                            onRemove={() => onRemoveTodo(item.id)}
+                        ></TodoItem>
+                    )
+                })
+            }
         </ul>
     )
 }
-TodoList.PropTypes={
-    todos:PropTypes.array.isRequired
+TodoList.PropTypes = {
+    todos: PropTypes.array.isRequired
 }
 const selectVisibleTodos = (todos, filter) => {
     switch (filter) {
-      case FilterTypes.ALL:
-        return todos;
-      case FilterTypes.COMPLETED:
+    case FilterTypes.ALL:
+        return todos
+    case FilterTypes.COMPLETED:
         return todos.filter(item => item.completed)
-      case FilterTypes.UNCOMPLETED:
+    case FilterTypes.UNCOMPLETED:
         return todos.filter(item => !item.completed)
-      default:
+    default:
         throw new Error('unsupported filter')
     }
-  }
-  const mapStateToProps = (state) => {
+}
+const mapStateToProps = (state) => {
     return {
-      todos: selectVisibleTodos(state.todos, state.filter)
+        todos: selectVisibleTodos(state.todos, state.filter)
     }
-  }
-  const mapDispatchToProps = (dispatch) => {
+}
+const mapDispatchToProps = (dispatch) => {
     return {
-      onToggleTodo: (id) => {
-        dispatch(toggleTodo(id));
-      },
-      onRemoveTodo: (id) => {
-        dispatch(removeTodo(id));
-      }
+        onToggleTodo: (id) => {
+            dispatch(toggleTodo(id))
+        },
+        onRemoveTodo: (id) => {
+            dispatch(removeTodo(id))
+        }
     }
-  }
-  export default connect(mapStateToProps, mapDispatchToProps)(TodoList)
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList)

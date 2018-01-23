@@ -1,4 +1,4 @@
-import {SET_FILTER} from './actionTypes.js'
+import { SET_FILTER } from './actionTypes.js'
 
 export const setFilter = (filterType) => ({
     'filter': filterType,
