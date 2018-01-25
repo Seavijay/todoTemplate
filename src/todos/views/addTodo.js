@@ -11,7 +11,6 @@ class AddTodo extends Component {
             value: ''
         }
         this.onSubmit = this.onSubmit.bind(this)
-        this.refInput = this.refInput.bind(this)
         this.onInputChange = this.onInputChange.bind(this)
     }
 
@@ -36,8 +35,7 @@ class AddTodo extends Component {
         return (
             <div className='add-todo'>
                 <form onSubmit={this.onSubmit}>
-                    <input className='new-todo' onChange={this.onInputChange()}
-                        value={this.state.value} />
+                    <input className='new-todo' onChange={this.onInputChange} value={this.state.value} />
                     <button className='add-btn' type='submit'>Add</button>
                 </form>
             </div>
